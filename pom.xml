@@ -10,6 +10,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>Authentication-8083</module>
+        <module>Gateway-9090</module>
     </modules>
 
     <properties>

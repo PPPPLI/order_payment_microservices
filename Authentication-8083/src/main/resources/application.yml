@@ -28,4 +28,3 @@ spring:
 logging:
   level:
     com.cloud.spring.controller: debug
-    org.springframework.security: debug
