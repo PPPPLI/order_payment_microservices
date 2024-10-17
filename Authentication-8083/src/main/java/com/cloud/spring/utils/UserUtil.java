@@ -1,6 +1,6 @@
 package com.cloud.spring.utils;
 
-import com.cloud.spring.entity.dto.UserDTO;
+import com.cloud.spring.dto.UserDTO;
 import com.cloud.spring.entity.vo.Authority;
 import com.cloud.spring.entity.vo.User;
 import org.springframework.stereotype.Component;

@@ -1,6 +1,6 @@
 package com.cloud.spring.controller;
 
-import com.cloud.spring.entity.dto.UserDTO;
+import com.cloud.spring.dto.UserDTO;
 import com.cloud.spring.entity.vo.User;
 import com.cloud.spring.service.UserService;
 import com.cloud.spring.utils.JwtUtil;

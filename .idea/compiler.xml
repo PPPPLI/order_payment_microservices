@@ -7,13 +7,22 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="Gateway-9090" />
+        <module name="Product-8080" />
+        <module name="Order-8082" />
         <module name="Authentication-8083" />
+        <module name="Gateway-9090" />
+        <module name="Commom" />
+        <module name="Payment-8081" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="Authentication-service-8083" target="17" />
       <module name="Authentification-service-8083" target="22" />
     </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="Order-8082" options="-parameters" />
+    </option>
   </component>
 </project>

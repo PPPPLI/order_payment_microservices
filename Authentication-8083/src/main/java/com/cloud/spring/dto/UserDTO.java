@@ -1,4 +1,4 @@
-package com.cloud.spring.entity.dto;
+package com.cloud.spring.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

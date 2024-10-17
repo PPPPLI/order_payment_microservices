@@ -18,7 +18,7 @@ public class JwtUtil {
     private static final JWTVerifier VERIFIER;
 
     static{
-        SIGNATURE = "microservices";
+        SIGNATURE = "bWljcm9zZXJ2aWNlcw";
         VERIFIER = JWT.require(Algorithm.HMAC256(SIGNATURE)).build();
     }
 
@@ -27,7 +27,7 @@ public class JwtUtil {
         Map<String,Object> map = Map.of("alg","HMAC256","typ","JWT");
 
         return JWT.create().withHeader(map)
-                .withExpiresAt(Instant.now().plus(3,ChronoUnit.MINUTES))
+                .withExpiresAt(Instant.now().plus(60,ChronoUnit.MINUTES))
                 .withIssuer("LP")
                 .withClaim("user",user)
                 .sign(Algorithm.HMAC256(SIGNATURE));
