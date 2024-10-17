@@ -11,6 +11,9 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Map;
 
+/**
+ * Token generator and verifier tool
+ * */
 @Component
 public class JwtUtil {
 

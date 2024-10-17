@@ -19,6 +19,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+
 
 @RestController
 @RequestMapping("/auth")
@@ -37,13 +39,14 @@ public class UserController {
     @Resource
     AuthenticationManager authenticationManager;
 
-    @GetMapping("/hello")
-    public String hello(){
-
-        return "hello";
-    }
-
-
+    /**
+     * @apiNote Login Api, first user must send his identity information, and it will be put into Security context for authentication use,
+     * meanwhile it will search the username in the database, then do a comparison between these two identities.
+     * If authentication passed, it will generate a one-hour token in order that user doesn't need re-login during next one hour. And
+     * user also can request the another services with this token.
+     *
+     * @param user:{username,password} in json format
+     * */
     @GetMapping("/login")
     public ResponseEntity<String> login(@RequestBody UserDTO user) {
 
@@ -54,6 +57,8 @@ public class UserController {
             Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(newUser.getUsername(), newUser.getPassword()));
             SecurityContextHolder.getContext().setAuthentication(authentication);
             String token = JwtUtil.createJwtToken(objectMapper.writeValueAsString(newUser));
+            log.info("{}- Token: {}", LocalDateTime.now(),token);
+
             return ResponseEntity.ok(token);
         } catch (JsonProcessingException e) {
             return ResponseEntity.status(HttpStatus.REQUEST_TIMEOUT).body("Please try later");
@@ -62,6 +67,15 @@ public class UserController {
         }
     }
 
+
+    /**
+     * @apiNote Register Api, as its name, it's used to sign up. Also, if we process successfully, in
+     * the end, use can get a generated one-hour token. By the way, before storing the password, we'll
+     * encode it for security reason.
+     *
+     * @param  user:{username,password} in json format
+     * @return ResponseEntity, variable in function of processing status
+     * */
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody UserDTO user) {
 

@@ -7,6 +7,10 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+
+/**
+ * Global exception handler, when it encounters exception issues, relative methods will be automatically recall
+ * */
 @RestControllerAdvice
 @Slf4j
 public class SecurityExceptionHandler {

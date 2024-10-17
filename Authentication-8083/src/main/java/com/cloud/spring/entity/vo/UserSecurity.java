@@ -8,6 +8,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * Unity of the user authentication in Spring security framework
+ * */
 @Data
 public class UserSecurity implements UserDetails {
 

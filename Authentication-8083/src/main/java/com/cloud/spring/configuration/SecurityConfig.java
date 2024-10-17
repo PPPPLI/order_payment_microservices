@@ -25,6 +25,9 @@ public class SecurityConfig{
     @Resource
     WebSecurityFilter webSecurityFilter;
 
+    /**
+    * Configure authentication parameters like identity check by path, and entry check by filter
+    * */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
@@ -36,6 +39,7 @@ public class SecurityConfig{
 
            req.requestMatchers("/auth/login").permitAll()
                    .requestMatchers("/auth/register").permitAll()
+                   .requestMatchers("/auth/api-doc").permitAll()
                    .anyRequest().authenticated();
         });
 
@@ -43,6 +47,7 @@ public class SecurityConfig{
         return http.build();
     }
 
+    //Encoder for encoding user's password before storing in the database
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -61,6 +66,7 @@ public class SecurityConfig{
         return authenticationManagerBuilder.build();
     }
 
+    //CORS configuration for front-end requests
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();

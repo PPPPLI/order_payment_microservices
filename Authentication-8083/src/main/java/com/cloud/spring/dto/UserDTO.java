@@ -6,6 +6,9 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
+/**
+ * Simple user identity which is open to user side
+ * */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
