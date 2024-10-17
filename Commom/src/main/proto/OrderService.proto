@@ -1,0 +1,31 @@
+syntax="proto3";
+
+package net.devh.boot.grpc.example;
+
+option java_multiple_files = true;
+option java_package = "net.devh.boot.grpc.examples.lib";
+option java_outer_classname = "OrderServiceProto";
+
+service OrderService{
+
+  rpc SendOrderToPayment(OrderPaymentRequest) returns (PaymentResultReply);
+  rpc DeletePayment(DeleteRequest) returns (PaymentResultReply);
+}
+
+
+message OrderPaymentRequest{
+  string userName=1;
+  double orderPrice=2;
+  string orderId=3;
+}
+
+message DeleteRequest{
+
+  string paymentId=1;
+}
+
+
+message PaymentResultReply{
+  bool orderPaid=1;
+  string paymentId=2;
+}

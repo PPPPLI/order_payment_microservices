@@ -1,0 +1,39 @@
+server:
+  port: 9090
+
+spring:
+  application:
+    name: gateway-9090
+
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        prefer-ip-address: true
+        service-name: ${spring.application.name}
+        register: true
+
+    gateway:
+      routes:
+        - id: auth8083
+          uri: lb://authentication-8083
+          predicates:
+            - Path=/usr/{id}
+          filters:
+            - SetPath=/auth/{id}
+
+        - id: order8082
+          uri: lb://order-8082
+          predicates:
+            - Path=/order/*
+
+        - id: payment8081
+          uri: lb://payment-8081
+          predicates:
+            - Path=/payment/api-doc
+
+        - id: product8084
+          uri: lb://product-8084
+          predicates:
+            - Path=/product/api-doc

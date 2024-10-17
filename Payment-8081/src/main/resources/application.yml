@@ -1,0 +1,35 @@
+server:
+  port: 8081
+
+
+spring:
+  application:
+    name: payment-8081
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 3333
+    url: jdbc:mysql://localhost:3306/microservices
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
+
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        service-name: ${spring.application.name}
+        prefer-ip-address: true
+grpc:
+  server:
+    port: 9000
+
+
+springdoc:
+  api-docs:
+    path: /payment/api-doc

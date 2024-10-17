@@ -1,0 +1,64 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: order-8082
+
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        prefer-ip-address: true
+        service-name: ${spring.application.name}
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 3333
+    url: jdbc:mysql://localhost:3306/microservices
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
+    show-sql: true
+
+
+  data:
+    redis:
+      host: 192.168.133.129
+      port: 6379
+      password: 3333
+
+  cache:
+    cache-names: order-cache
+    type: redis
+    redis:
+      time-to-live: 600000
+
+signature:
+  key: bWljcm9zZXJ2aWNlcwy
+
+
+
+grpc:
+  client:
+    OrderService:
+      address: static://localhost:9000
+      negotiation-type: plaintext
+    ProductOrderService:
+      address: static://localhost:9091
+      negotiation-type: plaintext
+
+
+logging:
+  level:
+    com.cloud.spring.controller: debug
+
+
+springdoc:
+  api-docs:
+    path: /order/api-doc
