@@ -36,8 +36,10 @@ public class WebSecurityFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
+
+        String uri = request.getRequestURI();
         //If request uri corresponds to these three types below, we let just the request pass to the next filter without checking
-        if(request.getRequestURI().equals("/auth/login") || request.getRequestURI().equals("/auth/register") || request.getRequestURI().equals("/auth/api-doc")) {
+        if(uri.equals("/auth/login") || uri.equals("/auth/register") || uri.equals("/auth/api-doc") || uri.equals("/actuator/health")) {
 
             filterChain.doFilter(request, response);
             return;

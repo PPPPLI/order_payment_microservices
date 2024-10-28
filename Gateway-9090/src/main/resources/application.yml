@@ -36,4 +36,12 @@ spring:
         - id: product8084
           uri: lb://product-8084
           predicates:
-            - Path=/product/api-doc
+            - Path=/product/*
+
+        - id: productList
+          uri: lb://product-8084
+          predicates:
+            - Path=/product/{img}
+          filters:
+            - SetPath=/{img}
+

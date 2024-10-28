@@ -6,6 +6,8 @@ import com.cloud.spring.sharedEntity.Product;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ProductServiceImpl implements ProductService {
 
@@ -16,5 +18,11 @@ public class ProductServiceImpl implements ProductService {
     public Product addProduct(Product product) {
 
         return productRepository.save(product);
+    }
+
+    @Override
+    public List<Product> getAllProducts() {
+
+        return productRepository.findAll();
     }
 }

@@ -25,6 +25,8 @@ public class UserDetailServiceImpl implements UserDetailsService {
 
         User user = userService.getUser(username);
 
+        log.info("User: {}",user);
+
         if(user == null) {
 
             log.error("User does not exist");

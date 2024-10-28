@@ -17,7 +17,9 @@ class ProductServiceImplTest {
     @Test
     void addProduct() {
 
-        Product product = Product.builder().productName("Football").productPrice(25.0).productQuantity(100).build();
+        Product product = Product.builder().productName("INTERFINE").productPrice(4.99).productQuantity(79)
+                .productDescription("Demi-couronne artificielle, 45 cm")
+                        .productUrl("/static/article3.png").build();
 
         productService.addProduct(product);
     }

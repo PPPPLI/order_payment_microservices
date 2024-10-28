@@ -47,7 +47,7 @@ public class UserController {
      *
      * @param user:{username,password} in json format
      * */
-    @GetMapping("/login")
+    @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody UserDTO user) {
 
 
@@ -83,6 +83,11 @@ public class UserController {
 
         User newUser = UserUtil.userToUser(user);
         newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
+
+        if(userService.getUser(newUser.getUsername()) != null){
+
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("Provided username is already taken");
+        }
 
 
         if (userService.addUser(newUser) == null) {

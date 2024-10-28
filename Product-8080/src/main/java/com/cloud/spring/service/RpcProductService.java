@@ -1,9 +1,9 @@
 package com.cloud.spring.service;
 
 import com.cloud.spring.repository.ProductRepository;
+import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 import jakarta.annotation.Resource;
-import jakarta.persistence.PersistenceException;
 import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.examples.lib.OrderProductRequest;
 
@@ -36,15 +36,15 @@ public class RpcProductService extends ProductOrderServiceGrpc.ProductOrderServi
         try {
 
             list.forEach(each -> productRepository.updateProductByProduct_name(each.getProductName(),each.getProductQuantity()));
-            responseObserver.onNext(ProductResultReply.newBuilder().setIsSucceed(true).build());
+            ProductResultReply reply = ProductResultReply.newBuilder().setIsSucceed(true).build();
+            responseObserver.onNext(reply);
             log.info("Successfully sent order to product");
+            responseObserver.onCompleted();
         }catch (Exception e){
 
-            responseObserver.onNext(ProductResultReply.newBuilder().setIsSucceed(false).build());
+            responseObserver.onError(Status.INTERNAL.withDescription("Error processing order").asRuntimeException());
             log.error("Error while sending order to product", e);
 
-        }finally {
-            responseObserver.onCompleted();
         }
 
     }

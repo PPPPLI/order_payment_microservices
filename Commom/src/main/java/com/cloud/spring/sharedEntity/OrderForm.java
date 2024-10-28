@@ -1,6 +1,7 @@
 package com.cloud.spring.sharedEntity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,19 +23,26 @@ import java.util.UUID;
 @Entity(name = "order_form")
 public class OrderForm implements Serializable {
 
+
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID orderId;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime orderDate;
     private String orderOwnerName;
     private boolean isPaid;
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "order_product",
-            joinColumns = @JoinColumn(name = "orderId"),
-            inverseJoinColumns = @JoinColumn(name = "productId")
-    )
-    private List<Product> productList;
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @JsonIgnoreProperties("order")
+    private List<OrderProduct> orderProducts;
+
+    @Override
+    public String toString() {
+        return "OrderForm{" +
+                "orderId=" + orderId +
+                ", orderDate=" + orderDate +
+                ", orderOwnerName='" + orderOwnerName + '\'' +
+                ", isPaid=" + isPaid +
+                '}';
+    }
 }

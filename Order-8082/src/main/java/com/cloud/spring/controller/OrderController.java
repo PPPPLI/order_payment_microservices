@@ -10,11 +10,12 @@ import net.devh.boot.grpc.examples.lib.PaymentResultReply;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @Slf4j
@@ -27,13 +28,20 @@ public class OrderController {
     private RpcOrderServiceImpl rpcOrderService;
 
 
-    /**
-     * @apiNote Create a new order api
-     * @param  order: {orderDate,orderOwnerName,isPaid,productList} in Json format
-     * */
-    @PostMapping("/order/create")
-    public ResponseEntity<String> createOrder(@RequestBody OrderForm order) {
 
+    /**
+     * @apiNote This is a most delicate api, it will communicate with the two other services to finish payment and
+     * update the storage of products. Because of the structure of microservices, we must think about failure case when writing into
+     * database. So the SAGA pattern is considered here to process data compensation.
+     *
+     * @param  order: {orderOwnerName,isPaid,productList} in Json format
+     * */
+    @PostMapping("/order/payment")
+    public ResponseEntity<String> payment(@RequestBody OrderForm order) {
+
+        order.setOrderDate(LocalDateTime.now());
+        order.setOrderId(UUID.randomUUID());
+        order.getOrderProducts().forEach(ele -> ele.setOrder(order));
 
         if(orderService.saveOrder(order) == null){
 
@@ -44,22 +52,9 @@ public class OrderController {
 
         log.info("{} - Order created", LocalDateTime.now());
 
-        return ResponseEntity.status(HttpStatus.CREATED).body("Order created successfully");
-    }
-
-
-    /**
-     * @apiNote This is a most delicate api, it will communicate with the two other services to finish payment and
-     * update the storage of products. Because of the structure of microservices, we must think about failure case when writing into
-     * database. So the SAGA pattern is considered here to process data compensation.
-     *
-     * @param  order: {orderId,orderDate,orderOwnerName,isPaid,productList} in Json format
-     * */
-    @PostMapping("/order/payment")
-    public ResponseEntity<String> payment(@RequestBody OrderForm order) {
 
         //Sum the product's price
-        Double price = order.getProductList().stream().map(product -> product.getProductPrice() * product.getProductQuantity()).reduce(0.0, Double::sum);
+        Double price = order.getOrderProducts().stream().map(product -> product.getProduct().getProductPrice() * product.getQuantity()).reduce(0.0, Double::sum);
 
         //Process the payment
         PaymentResultReply reply = rpcOrderService.OrderToPayment(order.getOrderOwnerName(), price,order.getOrderId().toString());
@@ -71,7 +66,9 @@ public class OrderController {
         }
 
         //process to the product storage
-        List<Product> productList = order.getProductList();
+        List<Product> productList = new ArrayList<>();
+
+        order.getOrderProducts().forEach(ele -> productList.add(ele.getProduct()));
 
 
         //If the product service processes correctly, update status of the relative order(isPaid = true)
