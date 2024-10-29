@@ -1,8 +1,11 @@
-# OOS - Order - Payment - Product - E-commerce project
+# Docker - Microservices - Order - Payment - Product - E-commerce project
+
+## **Si vous voulez tester directement le projet, ici le lien sur Azure Cloud: http://40.66.40.168/home**
+N.B. Le projet n'accepte momentanement que la version ordinateur, veuillez utiliser un navigateur sur l'ordinateur s'il vous plaît.
 
 <h3><b>Introduction</b></h3>
 
-Ce projet est un simple système de e-commerce. Il contient au total 5 services.
+Ce projet est un simple système de e-commerce. Il contient au total 4 services principaux(Authentification, Commande, Paiement, Produit), 1 Mysql, 1 Redis, 1 Gateway ainsi que 1 centre de gestion et d'orchestration des servies.
 
 Tout d'abord, le **gateway** agit comme une façade unique qui redirige les requêtes des utilisateurs vers les différents services internes. Il distribue les requêtes en fonction de la route ou du type de service demandé, ce qui facilite la gestion du trafic vers les services appropriés sans que le client ait à connaître l'architecture sous-jacente.
 
@@ -25,7 +28,7 @@ N.B. Tous les services sont inscrits dans un **centre de gestion et d'orchestrat
 
 <br>
 
-## **Démarrage**
+## **Démarrage classique**
 
 1. Colon ce repository
 2. Modifier la configuration pour la partie de datasource en fonction de paramètres locaux lié à votre propre base de données(username, password...)
@@ -35,6 +38,20 @@ N.B. Tous les services sont inscrits dans un **centre de gestion et d'orchestrat
 3. Démarrer Consul service
 4. Démarrer Redis server
 5. Démarrer les 5 services repectivement sauf le module Common
+
+## **Démarrage en Docker**
+
+1. Phase préparatoire
+   
+   - Pull de Docker Hub les images nécessaires : mysql:8.0 | consul:1.15.4 | redis:7.4
+   - Classifier les fichiers Jars, Dockerfiles et docker-compose.yml en suivant la structure dessous
+
+   ![image](https://github.com/user-attachments/assets/a1950bff-5ba4-4428-9051-220f6f46cc11)
+
+
+2. Phase d'exécution
+
+   - Lancer la commande "docker compose up --build -d" au chemin /docker
 
 ## **URL d'api-doc**
 
