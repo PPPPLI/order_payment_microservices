@@ -25,6 +25,7 @@ public class OrderForm implements Serializable {
 
 
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID orderId;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")

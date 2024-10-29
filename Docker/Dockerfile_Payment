@@ -1,9 +1,12 @@
+# Use of basical image jdk
 FROM openjdk:17-jdk-slim
+# Environment variables
 ENV author=LIU
 
+# Root path in the container
 WORKDIR /app
-
+# Copy the Jar file from host machine into container
 COPY payment/Payment-8081-1.0-SNAPSHOT.jar app.jar
-
+# Entry point, when container starts, this command will definitively executed to start the java program
 ENTRYPOINT ["java","-jar","/app/app.jar"]
 

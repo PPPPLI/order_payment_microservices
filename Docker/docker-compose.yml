@@ -1,102 +1,119 @@
 services:
-  mysql:
-    image: mysql:8.0
-    container_name: mysql_back
-    restart: always
-    environment:
+  mysql:    # Relational database to store Order, Product, Payment data
+    image: mysql:8.0     # Use an existing image pulled from Docker Hub
+    container_name: mysql_back    # container name definition
+    restart: always       # In case of failure, the container will restart
+    environment:     # Definition of environment variables, like authentication parameters
       MYSQL_ROOT_PASSWORD: 3333
       MYSQL_DATABASE: microservices
       MYSQL_USER: user
       MYSQL_PASSWORD: 3333
-    ports:
+    ports:    # Port mapping to 3306
       - "3306:3306"
-    volumes:
+    volumes:   # Volume binding to persistent data
       - mysql_data:/var/lib/mysql
+    networks:  # Affection of a user-defined custom network
+      - backend_net
 
-  consul:
-    image: consul:1.15.4
-    container_name: consul_back
+  consul:  # Service registration center for service discovery
+    image: consul:1.15.4   # Image from Docker Hub
+    container_name: consul_back  # Container name
     restart: always
-    ports:
+    ports:  # Port mapping to 8500
       - "8500:8500"
-    command: "consul agent -dev -client=0.0.0.0"
+    command: "consul agent -dev -client=0.0.0.0"  # Execute the command when container runs, here it is for starting Consul
+    networks:  # Custom network affectation with bridge type
+      - backend_net
 
-  redis:
-    image: redis:7.4
-    container_name: redis_back
-    restart: always
-    ports:
+  redis:  # Cache database to improve data search performance
+    image: redis:7.4  # Image from Docker Hub
+    container_name: redis_back  # Container name
+    restart: always  # retart mechanism
+    ports:  # Port mapping to 6379
       - "6379:6379"
-    volumes: 
+    volumes:  # Volume binding to redis_data
       - redis_data:/var/lib/redis
-    command: ["redis-server","--requirepass","3333"]
+    command: ["redis-server","--requirepass","3333"]  # Command to start redis with a simple password configuration
+    networks:    # Custom network affectation with bridge type
+      - backend_net
 
-  authentication_service:
-    build:
-      context: ../Authentication-8083
-      dockerfile: auth/Dockerfile_Auth
-    container_name: auth-service
-    depends_on:
-      - mysql
-      - consul
-    ports:
+  authentication_service:  # Authentication service used to login, registration functions
+    build:  # Build the image by Dockerfile
+      context: .  # Root path
+      dockerfile: auth/Dockerfile_Auth  #Dockerfile path
+    container_name: auth-service  # Container name
+    depends_on:  # Dependency declaration, containers will run by respecting a specific order
+      - mysql  # Dependency
+      - consul  # Idem
+    ports:  # Port mapping to 8083
       - "8083:8083"
-    restart: always
+    restart: always  # Retart in case of failure
+    networks:  # network affectation
+      - backend_net
 
-  gateway_service:
-    build:
-      context: ../Authentication-8083
+  gateway_service:  # API gateway serves as a single entry point for client requests
+    build:  # Build the image by Dockerfile
+      context: .
       dockerfile: gateway/Dockerfile_Gateway
-    
-    container_name: gateway-service
-    ports:
+    networks:  # Network affectation
+      - backend_net
+    container_name: gateway-service  # Container name
+    ports:  # Port mapping to 9090
       - "9090:9090"
-    depends_on:
+    depends_on:  # Dependency
       - consul
-    restart: always
+    restart: always  # restart mechanism
 
-  order_service:
-    build:
-      context: ../Authentication-8083
+
+  order_service:  # Order service to process clients' orders and write them into database
+    build:  # Build the image by Dockerfile
+      context: .
       dockerfile: order/Dockerfile_Order
-        
-    container_name: order-service
-    depends_on:
+    container_name: order-service  # Container name
+    depends_on: # Dependency
       - consul
       - redis
       - mysql
-    ports:
+    ports:  # Port Mapping to 8082
       - "8082:8082"
     restart: always
+    networks:  # Network affectation
+      - backend_net
 
-  payment_service:
-    build:
-      context: ../Authentication-8083
+  payment_service:  # Payment service to process payment treatments
+    build:  # Build the image by Dockerfile
+      context: .
       dockerfile: payment/Dockerfile_Payment
-        
-    container_name: payment-service
-    depends_on:
+    container_name: payment-service  # Container name
+    depends_on: # Dependency
       - consul
       - mysql
-    ports:
+    ports:  # Port Binding, 8081 to tomcat and 9000 to Grpc listener
       - "8081:8081"
       - "9000:9000"
     restart: always
+    networks:  # Network affectation
+      - backend_net
 
-  product_service:
-    build:
-      context: ../Authentication-8083
+  product_service:  # Product service to product's storage management
+    build:  # Build the image by Dockerfile
+      context: .
       dockerfile: product/Dockerfile_Product
-        
-    container_name: product-service
-    depends_on:
+    container_name: product-service  # Container name
+    depends_on:  #Dependency
       - consul
       - mysql
-    ports:
+    ports: # Port mapping, 8084 to Tomcat, 9091 to Grpc listener
       - "8084:8084"
       - "9091:9091"
     restart: always
+    networks:   # Network affectation
+      - backend_net
 
-volumes:
+volumes:  # Creation of volumes
   mysql_data:
   redis_data:
+
+networks:  # Creation of user-defined custom network
+  backend_net:
+    driver: bridge
