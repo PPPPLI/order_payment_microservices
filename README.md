@@ -1,13 +1,19 @@
-# Docker - Microservices - Order - Payment - Product - E-commerce project
+# Microservices - Docker - E-commerce - Order - Payment - Product 
+
+### **Membres du groupe**
+- LIU Pei
+- XIA Ruixiang
 
 ## **Si vous voulez tester directement le projet, ici le lien sur Azure Cloud: http://40.66.40.168/home** (Si le serveur est disponible)
 N.B. Le projet n'accepte momentanement que la version ordinateur, veuillez utiliser un navigateur sur l'ordinateur s'il vous plaît.
 
 <h3><b>Introduction</b></h3>
 
-Ce projet est un simple système de e-commerce. Il contient au total 4 services principaux(Authentification, Commande, Paiement, Produit), 1 Mysql, 1 Redis, 1 Gateway ainsi que 1 centre de gestion et d'orchestration des servies.
+Ce projet est un simple système de e-commerce. Il contient au total 6 services principaux(Authentification, Commande, Paiement, Produit, Gateway API, Front-end), 1 Mysql, 1 Redis, ainsi que 1 centre de gestion et d'orchestration des servies.
 
-Tout d'abord, le **gateway** agit comme une façade unique qui redirige les requêtes des utilisateurs vers les différents services internes. Il distribue les requêtes en fonction de la route ou du type de service demandé, ce qui facilite la gestion du trafic vers les services appropriés sans que le client ait à connaître l'architecture sous-jacente.
+Tout d'abord l'utilisateur envoie une requête au serveur.
+
+Ensuite, le **gateway** agit comme une façade unique qui redirige les requêtes des utilisateurs vers les différents services internes. Il distribue les requêtes en fonction de la route ou du type de service demandé, ce qui facilite la gestion du trafic vers les services appropriés sans que le client ait à connaître l'architecture sous-jacente.
 
 Le **service d'authentification** est utilisé pour générer un token permettant aux utilisateurs de s'authentifier automatiquement auprès des autres services.
 
@@ -31,13 +37,13 @@ N.B. Tous les services sont inscrits dans un **centre de gestion et d'orchestrat
 ## **Démarrage classique**
 
 1. Colon ce repository
-2. Modifier la configuration pour la partie de datasource en fonction de paramètres locaux lié à votre propre base de données(username, password...)
+2. Modifier la configuration pour la partie de datasource en fonction de paramètres locaux lié à votre propre base de données(username, password...), et aussi aux addresses IP
    
    ![image](https://github.com/user-attachments/assets/003af4a1-d0bc-4f89-b3c7-4f6bd4c9c0b4)
-
-3. Démarrer Consul service
-4. Démarrer Redis server
-5. Démarrer les 5 services repectivement sauf le module Common
+3. Installer le dépendance du module Common, qui est un module partagé par les autres services    
+4. Démarrer Consul service
+5. Démarrer Redis server
+6. Démarrer les 5 services repectivement sauf le module Common
 
 ## **Démarrage en Docker**
 
