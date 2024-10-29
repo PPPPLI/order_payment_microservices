@@ -3,6 +3,6 @@ ENV author=LIU
 
 WORKDIR /app
 
-COPY target/Authentication-8083-1.0-SNAPSHOT.jar app.jar
+COPY ../Authentication-8083/target/Authentication-8083-1.0-SNAPSHOT.jar app.jar
 
 ENTRYPOINT ["java", "-jar", "app.jar"]
