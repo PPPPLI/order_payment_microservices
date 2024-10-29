@@ -1,6 +1,6 @@
 # Docker - Microservices - Order - Payment - Product - E-commerce project
 
-## **Si vous voulez tester directement le projet, ici le lien sur Azure Cloud: http://40.66.40.168/home**
+## **Si vous voulez tester directement le projet, ici le lien sur Azure Cloud: http://40.66.40.168/home** (Si le serveur est disponible)
 N.B. Le projet n'accepte momentanement que la version ordinateur, veuillez utiliser un navigateur sur l'ordinateur s'il vous plaît.
 
 <h3><b>Introduction</b></h3>
@@ -55,8 +55,15 @@ N.B. Tous les services sont inscrits dans un **centre de gestion et d'orchestrat
 
 ## **URL d'api-doc**
 
-- **http://localhost:8081/api-doc**
-- **http://localhost:8082/api-doc**
+- **http://localhost:9090/order/api-doc**
+- **http://localhost:9090/payment/api-doc**
+- **http://localhost:9090/product/api-doc**
+  
+  ![image](https://github.com/user-attachments/assets/2126b4ab-e670-4c4d-b775-7b65881f21f2)
+  ![image](https://github.com/user-attachments/assets/e6d9c638-3c24-4913-a3ae-da7aa818d2e2)
+  ![image](https://github.com/user-attachments/assets/6f4d68c8-0626-4b02-8c28-c12d7171cc98)
+
+
 
 ## Golbal Exception Handler
 
