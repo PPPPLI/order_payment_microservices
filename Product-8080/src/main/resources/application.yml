@@ -13,7 +13,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: 3333
-    url: jdbc:mysql://localhost:3306/microservices
+    url: jdbc:mysql://mysql_back:3306/microservices
 
   jpa:
     hibernate:
@@ -28,7 +28,7 @@ spring:
       discovery:
         prefer-ip-address: true
         service-name: ${spring.application.name}
-      host: localhost
+      host: consul_back
       port: 8500
 
 

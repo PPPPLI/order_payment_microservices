@@ -7,7 +7,7 @@ spring:
 
   cloud:
     consul:
-      host: localhost
+      host: consul_back
       port: 8500
       discovery:
         prefer-ip-address: true
@@ -17,7 +17,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: 3333
-    url: jdbc:mysql://localhost:3306/microservices
+    url: jdbc:mysql://mysql_back:3306/microservices
 
   jpa:
     hibernate:
@@ -29,7 +29,7 @@ spring:
 
   data:
     redis:
-      host: 192.168.133.129
+      host: redis_back
       port: 6379
       password: 3333
 
@@ -47,10 +47,10 @@ signature:
 grpc:
   client:
     OrderService:
-      address: static://localhost:9000
+      address: "dns:///payment-service:9000"
       negotiation-type: plaintext
     ProductOrderService:
-      address: static://localhost:9091
+      address: "dns:///product-service:9091"
       negotiation-type: plaintext
 
 

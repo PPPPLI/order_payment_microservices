@@ -1,0 +1,102 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql_back
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 3333
+      MYSQL_DATABASE: microservices
+      MYSQL_USER: user
+      MYSQL_PASSWORD: 3333
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  consul:
+    image: consul:1.15.4
+    container_name: consul_back
+    restart: always
+    ports:
+      - "8500:8500"
+    command: "consul agent -dev -client=0.0.0.0"
+
+  redis:
+    image: redis:7.4
+    container_name: redis_back
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes: 
+      - redis_data:/var/lib/redis
+    command: ["redis-server","--requirepass","3333"]
+
+  authentication_service:
+    build:
+      context: .
+      dockerfile: auth/Dockerfile_Auth
+    container_name: auth-service
+    depends_on:
+      - mysql
+      - consul
+    ports:
+      - "8083:8083"
+    restart: always
+
+  gateway_service:
+    build:
+      context: .
+      dockerfile: gateway/Dockerfile_Gateway
+    
+    container_name: gateway-service
+    ports:
+      - "9090:9090"
+    depends_on:
+      - consul
+    restart: always
+
+  order_service:
+    build:
+      context: .
+      dockerfile: order/Dockerfile_Order
+        
+    container_name: order-service
+    depends_on:
+      - consul
+      - redis
+      - mysql
+    ports:
+      - "8082:8082"
+    restart: always
+
+  payment_service:
+    build:
+      context: .
+      dockerfile: payment/Dockerfile_Payment
+        
+    container_name: payment-service
+    depends_on:
+      - consul
+      - mysql
+    ports:
+      - "8081:8081"
+      - "9000:9000"
+    restart: always
+
+  product_service:
+    build:
+      context: .
+      dockerfile: product/Dockerfile_Product
+        
+    container_name: product-service
+    depends_on:
+      - consul
+      - mysql
+    ports:
+      - "8084:8084"
+      - "9091:9091"
+    restart: always
+
+volumes:
+  mysql_data:
+  redis_data:

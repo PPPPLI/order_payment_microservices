@@ -41,9 +41,11 @@ public class OrderServiceImpl implements OrderService {
      * Always the same cache storage logic, but here we get orders just by username
      * */
     @Override
-    @Cacheable(cacheNames = "order-cache",key = "#customer")
+    @Cacheable(cacheNames = "order-cache",key = "#customer", condition = "#customer != null and #customer.length() > 0", unless = "#result == null")
     @Transactional(readOnly = true)
     public List<OrderForm> findOrderByCustomer(String customer) {
+
+        log.error("Service Parameter is {}",customer);
 
         return orderRepository.findOrderByOrderOwnerName(customer);
     }

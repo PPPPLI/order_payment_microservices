@@ -1,0 +1,9 @@
+FROM openjdk:17-jdk-slim
+ENV author=LIU
+
+WORKDIR /app
+
+COPY payment/Payment-8081-1.0-SNAPSHOT.jar app.jar
+
+ENTRYPOINT ["java","-jar","/app/app.jar"]
+

@@ -7,7 +7,7 @@ spring:
 
   cloud:
     consul:
-      host: localhost
+      host: 4.233.150.100
       port: 8500
       discovery:
         service-name: ${spring.application.name}
@@ -17,7 +17,10 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: 3333
-    url: jdbc:mysql://localhost:3306/microservices
+    url: jdbc:mysql://mysql_back:3306/microservices
+    hikari:
+      max-lifetime: 1800000
+      connection-timeout: 30000
 
   jpa:
     hibernate:

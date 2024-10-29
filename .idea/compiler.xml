@@ -22,7 +22,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="Order-8082" options="-parameters" />
+      <module name="Order-8082" options="" />
     </option>
   </component>
 </project>

@@ -123,6 +123,8 @@ public class OrderController {
     @GetMapping("/order/{name}")
     public ResponseEntity<List<OrderForm>> getOrder(@PathVariable("name") String orderOwnerName) {
 
+        log.error("Parameter is {}",orderOwnerName);
+
         return ResponseEntity.ok(orderService.findOrderByCustomer(orderOwnerName));
     }
 

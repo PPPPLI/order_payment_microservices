@@ -1,0 +1,8 @@
+FROM openjdk:17-jdk-slim
+ENV author=LIU
+
+WORKDIR /app
+
+COPY order/Order-8082-1.0-SNAPSHOT.jar app.jar
+
+ENTRYPOINT ["java","-jar","/app/app.jar"]
